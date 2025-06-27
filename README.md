@@ -1,9 +1,3 @@
-ST10417350_PROG6221_POE
-Student Name: Connor Manuel
-Student Number: ST10417350
-Module: PROG6221 – Programming 2A
-
-
 Cybersecurity Awareness Chatbot – PROG6221 POE Part 3
 -----------------------------------------------------
 
