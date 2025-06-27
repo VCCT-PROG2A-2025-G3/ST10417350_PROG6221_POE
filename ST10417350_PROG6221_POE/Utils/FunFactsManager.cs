@@ -1,8 +1,16 @@
-﻿using System;
+﻿//=========================== START OF FILE ===========================//
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+/*
+ * Connor Manuel
+ * ST10417350@vcconnect.edu.za
+ * ST10417350 
+ */
 
 namespace ST10417350_PROG6221_POE.Utils
 {
@@ -79,3 +87,4 @@ namespace ST10417350_PROG6221_POE.Utils
         }
     }
 }
+//=========================== END OF FILE ===========================//

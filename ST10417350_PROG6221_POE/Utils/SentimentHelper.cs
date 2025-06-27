@@ -1,17 +1,34 @@
-﻿using System;
+﻿//=========================== START OF FILE ===========================//
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/*
+ * Connor Manuel
+ * ST10417350@vcconnect.edu.za
+ * ST10417350 
+ */
+
 namespace ST10417350_PROG6221_POE.Utils
 {
+    /// <summary>
+    /// Helper class for analyzing user sentiment and generating appropriate responses.
+    /// </summary>
     public static class SentimentHelper
     {
+        /// <summary>
+        /// Analyzes the input string to determine the sentiment category.
+        /// </summary>
+        /// <param name="input">The user input string to analyze.</param>
+        /// <returns>A string representing the detected sentiment. Returns an empty string if no sentiment is matched.</returns>
         public static string GetSentiment(string input)
         {
-            input = input.ToLower();
+            input = input.ToLower(); 
 
+            // Check for keywords that indicate a specific sentiment
             if (input.Contains("worried") || input.Contains("scared"))
                 return "worried";
 
@@ -24,11 +41,18 @@ namespace ST10417350_PROG6221_POE.Utils
             if (input.Contains("happy") || input.Contains("good") || input.Contains("great"))
                 return "positive";
 
+            // If no keywords matched, return an empty string
             return string.Empty;
         }
 
+        /// <summary>
+        /// Generates a chatbot response based on the user's detected sentiment.
+        /// </summary>
+        /// <param name="sentiment">The sentiment category to respond to.</param>
+        /// <returns>A random friendly response based on the sentiment.</returns>
         public static string GetResponse(string sentiment)
         {
+            // Define responses for each sentiment type
             Dictionary<string, List<string>> responseMap = new Dictionary<string, List<string>>
             {
                 { "worried", new List<string>
@@ -60,13 +84,16 @@ namespace ST10417350_PROG6221_POE.Utils
                 }}
             };
 
+            // Attempt to get the list of responses for the detected sentiment
             if (responseMap.TryGetValue(sentiment, out var responses))
             {
-                Random rand = new Random();
-                return responses[rand.Next(responses.Count)];
+                Random rand = new Random(); 
+                return responses[rand.Next(responses.Count)]; 
             }
 
+            // Return an empty string if the sentiment was not found in the dictionary
             return string.Empty;
         }
     }
 }
+//=========================== END OF FILE ===========================//

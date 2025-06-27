@@ -1,4 +1,12 @@
-﻿namespace ST10417350_PROG6221_POE
+﻿//=========================== START OF FILE ===========================//
+
+/*
+ * Connor Manuel
+ * ST10417350@vcconnect.edu.za
+ * ST10417350 
+ */
+
+namespace ST10417350_PROG6221_POE
 {
     partial class ChatbotForm
     {
@@ -419,3 +427,4 @@
         private System.Windows.Forms.Button editTaskButton;
     }
 }
+//=========================== END OF FILE ===========================//

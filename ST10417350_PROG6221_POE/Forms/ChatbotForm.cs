@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualBasic;
+﻿//=========================== START OF FILE ===========================//
+
+using Microsoft.VisualBasic;
 using ST10417350_PROG6221_POE.Models;
 using ST10417350_PROG6221_POE.Utils;
 using System;
@@ -11,6 +13,12 @@ using System.Text;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+
+/*
+ * Connor Manuel
+ * ST10417350@vcconnect.edu.za
+ * ST10417350 
+ */
 
 namespace ST10417350_PROG6221_POE
 {
@@ -37,7 +45,7 @@ namespace ST10417350_PROG6221_POE
         {
             InitializeComponent();
             InitializeChatbot();
-            InitializeQuiz(); // This will define 20 quiz questions
+            InitializeQuiz(); 
             LoadTasks();
             UpdateLogBox();
 
@@ -66,18 +74,24 @@ namespace ST10417350_PROG6221_POE
             };
         }
 
+        /// <summary>
+        /// Initializes the chatbot by displaying ASCII art banner,
+        /// welcoming the user, asking for their name,
+        /// and explaining chatbot capabilities.
+        /// Also attempts to play a greeting sound and logs startup.
+        /// </summary>
         private void InitializeChatbot()
         {
             // Ensure the form is shown before doing any long-running operations
             Application.DoEvents();
 
-            // Step 1: Display ASCII banner directly in chat
+            // Display ASCII banner directly in chat
             AppendChat("Bot", ASCIIArt.GetBanner());
 
-            // Step 2: Show welcome message
+            // Show welcome message
             AppendChat("Bot", "Welcome to the Cybersecurity Awareness Bot!");
 
-            // Step 3: Ask for user name
+            // Ask for user name
             string input = Microsoft.VisualBasic.Interaction.InputBox(
                 "What is your name?", "Welcome", "User");
 
@@ -94,13 +108,13 @@ namespace ST10417350_PROG6221_POE
                 AppendChat("Bot", "Okay, I'll just call you 'User' for now.");
             }
 
-            // Step 4: Explain purpose of the chatbot
+            // Explain purpose of the chatbot
             chatHistoryBox.AppendText($"[Bot]: Hello {userName}! I'm here to help you stay safe online.\r\n" +
                           "You can ask me about passwords, phishing, privacy, scams, and more!\r\n" +
                           "Type ' help ' for assistance or start asking questions below.\r\n\r\n");
             ScrollToBottom();
 
-            // Optional: Play greeting sound after all initial messages are displayed
+            // Play greeting sound after all initial messages are displayed
             try
             {
                 Greeting.PlayGreeting();
@@ -113,6 +127,12 @@ namespace ST10417350_PROG6221_POE
             LogHelper.Add("Chatbot started.");
         }
 
+        /// <summary>
+        /// Returns a random response string based on the given cybersecurity keyword.
+        /// Provides educational info or a default fallback if keyword not found.
+        /// </summary>
+        /// <param name="keyword">The keyword to respond to.</param>
+        /// <returns>A chatbot response string related to the keyword.</returns>
         private string GetKeywordResponse(string keyword)
         {
             Dictionary<string, List<string>> responses = new Dictionary<string, List<string>>
@@ -158,9 +178,14 @@ namespace ST10417350_PROG6221_POE
             return "That's an important topic. Let's talk more about it!";
         }
 
+        /// <summary>
+        /// Initializes the full set of quiz questions.
+        /// Includes a mix of multiple-choice and true/false questions.
+        /// After loading, it restarts the quiz to shuffle questions.
+        /// </summary>
         private void InitializeQuiz()
         {
-            // Add 20 quiz questions (4 true/false)
+            // 20 quiz questions (4 true/false)
             allQuizQuestions.Add(new QuizQuestion(
                 "What should you do if you receive an email asking for your password?",
                 new string[] { "Reply with your password", "Delete the email", "Report the email as phishing", "Ignore it" },
@@ -245,6 +270,11 @@ namespace ST10417350_PROG6221_POE
             RestartQuiz();
         }
 
+        /// <summary>
+        /// Resets and randomizes the quiz question set.
+        /// Ensures exactly 2 true/false and 8 other questions are selected and shuffled.
+        /// Resets current question index and score, then displays first question.
+        /// </summary>
         private void RestartQuiz()
         {
             Random rand = new Random();
@@ -275,6 +305,11 @@ namespace ST10417350_PROG6221_POE
             scoreLabel.Text = $"Score: {score}/{quizQuestions.Count}";
         }
 
+        /// <summary>
+        /// Displays the current quiz question and options on the UI.
+        /// Handles quiz completion by showing results, feedback, and restart prompt.
+        /// Removes any dynamic labels from previous questions.
+        /// </summary>
         private void ShowCurrentQuestion()
         {
             // Remove dynamic labels
@@ -320,7 +355,7 @@ namespace ST10417350_PROG6221_POE
                 }
                 else
                 {
-                    nextButton.Enabled = false; // Disable only if not restarting
+                    nextButton.Enabled = false;
                 }
 
                 return;
@@ -346,6 +381,10 @@ namespace ST10417350_PROG6221_POE
             if (q.Options.Length > 3) option4Radio.Text = q.Options[3];
         }
 
+        /// <summary>
+        /// Loads and appends the next page of log entries to the log display box.
+        /// Handles scenario when no more logs remain to show.
+        /// </summary>
         private void ShowMoreLogs()
         {
             var allLogs = LogHelper.GetAll().OrderByDescending(l => l.Timestamp).ToList();
@@ -363,6 +402,10 @@ namespace ST10417350_PROG6221_POE
             logPage++;
         }
 
+        /// <summary>
+        /// Clears and reloads the first page of log entries in the log display box.
+        /// Resets paging state for further log navigation.
+        /// </summary>
         private void UpdateLogBox()
         {
             logBox.Clear();
@@ -373,15 +416,23 @@ namespace ST10417350_PROG6221_POE
             {
                 logBox.AppendText(allLogs[i].ToString() + "\r\n");
             }
-            logPage = 1; // Ready for next page
+            logPage = 1; 
         }
 
+        /// <summary>
+        /// Event handler triggered when Activity Log tab is entered.
+        /// Resets log page counter and refreshes the log box contents.
+        /// </summary>
         private void tabPageActivityLog_Enter(object sender, EventArgs e)
         {
             logPage = 0;
             UpdateLogBox();
         }
 
+        /// <summary>
+        /// Handles tab control index changes.
+        /// Clears quiz UI if user navigates away from the Quiz tab.
+        /// </summary>
         private void MainTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (mainTabControl.SelectedTab != tabPageQuiz)
@@ -390,6 +441,10 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Clears all quiz UI elements and dynamic feedback labels.
+        /// Resets radio buttons and score labels to initial state.
+        /// </summary>
         private void ClearQuizUI()
         {
             questionLabel.Text = "";
@@ -414,6 +469,13 @@ namespace ST10417350_PROG6221_POE
             return -1;
         }
 
+        /// <summary>
+        /// Handles the click event for the 'Next' button in the quiz.
+        /// Validates answer selection, updates score, provides feedback,
+        /// logs the result, and advances to the next question.
+        /// </summary>
+        /// <param name="sender">Event sender object.</param>
+        /// <param name="e">Event arguments.</param>
         private void nextButton_Click(object sender, EventArgs e)
         {
             int selected = GetSelectedAnswerIndex();
@@ -465,6 +527,10 @@ namespace ST10417350_PROG6221_POE
             scoreLabel.Text = $"Score: {score}/{quizQuestions.Count}";
         }
 
+        /// <summary>
+        /// Handles GotFocus event for the title text box.
+        /// Removes placeholder text and sets text color to default on user focus.
+        /// </summary>
         private void TitleBox_GotFocus(object sender, EventArgs e)
         {
             if (titlePlaceholderVisible)
@@ -475,6 +541,10 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Handles LostFocus event for the title text box.
+        /// Restores placeholder text and gray color if the box is empty.
+        /// </summary>
         private void TitleBox_LostFocus(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(titleBox.Text))
@@ -485,6 +555,10 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Handles GotFocus event for the description text box.
+        /// Removes placeholder text and resets text color on user focus.
+        /// </summary>
         private void DescriptionBox_GotFocus(object sender, EventArgs e)
         {
             if (descriptionPlaceholderVisible)
@@ -495,6 +569,10 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Handles LostFocus event for the description text box.
+        /// Restores placeholder text and gray color if the box is empty.
+        /// </summary>
         private void DescriptionBox_LostFocus(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(descriptionBox.Text))
@@ -505,6 +583,10 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Loads and sorts tasks into the task list box.
+        /// Sorts first by completion status, then by reminder time.
+        /// </summary>
         private void LoadTasks()
         {
             taskListBox.Items.Clear();
@@ -519,6 +601,11 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Handles the click event for the send button in the chatbot.
+        /// Processes user input, appends chat history, logs conversation,
+        /// handles task list keyword detection, and clears input.
+        /// </summary>
         private void sendButton_Click(object sender, EventArgs e)
         {
             string userInput = inputBox.Text.Trim();
@@ -533,7 +620,7 @@ namespace ST10417350_PROG6221_POE
             LogHelper.Add($"User: {userInput}");
             LogHelper.Add($"Bot: {botResponse}");
 
-            // Optional: Tasks keyword detection
+            // Optional: Tasks keyword detection to display current tasks
             if (userInput.ToLower().Contains("tasks") ||
                 userInput.ToLower().Contains("show my tasks"))
             {
@@ -567,6 +654,9 @@ namespace ST10417350_PROG6221_POE
             inputBox.Clear();
         }
 
+        /// <summary>
+        /// Scrolls the chat history box to the bottom to show the latest messages.
+        /// </summary>
         private void ScrollToBottom()
         {
             if (chatHistoryBox.TextLength > 0)
@@ -576,6 +666,10 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Handles the KeyDown event for the input box.
+        /// Submits the input when Enter key is pressed, suppressing the key to avoid newline.
+        /// </summary>
         private void inputBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -585,6 +679,10 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Handles the click event for adding a new task.
+        /// Validates input, optionally sets reminder, adds the task, and logs the action.
+        /// </summary>
         private void addTaskButton_Click(object sender, EventArgs e)
         {
             string title = titleBox.Text.Trim();
@@ -616,6 +714,10 @@ namespace ST10417350_PROG6221_POE
             LoadTasks();
         }
 
+        /// <summary>
+        /// Handles the click event to mark the selected task as completed.
+        /// Updates task status, logs the action, and reloads the task list.
+        /// </summary>
         private void completeTaskButton_Click(object sender, EventArgs e)
         {
             if (taskListBox.SelectedItem is TaskItem task)
@@ -626,6 +728,10 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Handles the click event to delete the selected task.
+        /// Removes the task, logs the deletion, and reloads the task list.
+        /// </summary>
         private void deleteTaskButton_Click(object sender, EventArgs e)
         {
             if (taskListBox.SelectedItem is TaskItem task)
@@ -636,6 +742,10 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Handles the click event to edit the selected task's title and description.
+        /// Prompts user for new values, updates the task, logs the changes, and reloads the list.
+        /// </summary>
         private void editTaskButton_Click(object sender, EventArgs e)
         {
             if (taskListBox.SelectedItem is TaskItem selectedTask)
@@ -653,6 +763,10 @@ namespace ST10417350_PROG6221_POE
             }
         }
 
+        /// <summary>
+        /// Custom draw event for task list box items.
+        /// Colors tasks green if completed, red if overdue reminders, or default black otherwise.
+        /// </summary>
         private void taskListBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return;
@@ -672,18 +786,26 @@ namespace ST10417350_PROG6221_POE
             e.DrawFocusRectangle();
         }
 
+        /// <summary>
+        /// Returns a random fallback response for unrecognized chatbot inputs.
+        /// </summary>
+        /// <returns>A randomly selected fallback response string.</returns>
         private string GetRandomFallback()
         {
             List<string> responses = new List<string>
-            {
-             "Interesting! Tell me more.",
-             "That's good to know.",
-                "Cybersecurity is important. Let's talk about it!",
-                "Thanks for sharing!"
-            };
+    {
+        "Interesting! Tell me more.",
+        "That's good to know.",
+        "Cybersecurity is important. Let's talk about it!",
+        "Thanks for sharing!"
+    };
             return responses[rand.Next(responses.Count)];
         }
 
+        /// <summary>
+        /// Form load event handler for chatbot form.
+        /// Sets up custom drawing mode and event for the task list box.
+        /// </summary>
         private void ChatbotForm_Load(object sender, EventArgs e)
         {
             taskListBox.DrawMode = DrawMode.OwnerDrawFixed;
@@ -691,11 +813,22 @@ namespace ST10417350_PROG6221_POE
             taskListBox.DrawItem += taskListBox_DrawItem;
         }
 
+        /// <summary>
+        /// Handles the click event for the 'Show More' logs button.
+        /// Loads additional logs and scrolls the chat history to bottom.
+        /// </summary>
         private void showMoreButton_Click(object sender, EventArgs e)
         {
             ShowMoreLogs();
             ScrollToBottom();
         }
+
+        /// <summary>
+        /// Helper method to append a chat message with a speaker label to the chat history box.
+        /// Automatically scrolls to the end.
+        /// </summary>
+        /// <param name="speaker">Speaker name, e.g., "You" or "Bot".</param>
+        /// <param name="message">Message text to append.</param>
         private void AppendChat(string speaker, string message)
         {
             chatHistoryBox.AppendText($"[{speaker}]: {message}\r\n\r\n");
@@ -705,16 +838,26 @@ namespace ST10417350_PROG6221_POE
             chatHistoryBox.ScrollToCaret();
         }
 
+        /// <summary>
+        /// Handles entering the quiz tab page.
+        /// Resets and restarts the quiz, enabling the next button.
+        /// </summary>
         private void tabPageQuiz_Enter(object sender, EventArgs e)
         {
             RestartQuiz();
             nextButton.Enabled = true;
         }
-    }
 
-
-    public static class TaskManager
-    {
-        public static List<TaskItem> Tasks { get; } = new List<TaskItem>();
+        /// <summary>
+        /// Static manager class holding the global list of tasks.
+        /// </summary>
+        public static class TaskManager
+        {
+            /// <summary>
+            /// The shared list of TaskItem objects representing the user's tasks.
+            /// </summary>
+            public static List<TaskItem> Tasks { get; } = new List<TaskItem>();
+        }
     }
 }
+//=========================== END OF FILE ===========================//
