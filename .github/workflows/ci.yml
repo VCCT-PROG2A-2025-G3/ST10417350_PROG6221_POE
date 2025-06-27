@@ -1,0 +1,27 @@
+name: Build Windows Forms Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Setup .NET Framework
+      run: echo ".NET Framework project – building via MSBuild"
+
+    - name: Restore NuGet Packages
+      run: nuget restore ST10417350_PROG6221_POE.sln
+      working-directory: ${{ github.workspace }}
+
+    - name: Build Solution
+      run: msbuild ST10417350_PROG6221_POE.sln /p:Configuration=Release /p:Platform="Any CPU"
